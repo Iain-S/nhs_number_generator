@@ -18,6 +18,7 @@ Examples:
 
 """
 
+from __future__ import unicode_literals
 from random import randint
 from argparse import ArgumentParser
 
@@ -138,7 +139,7 @@ def is_valid_nhs_number(nhs_number):
     NHS numbers in 3-3-4 format should be converted first, i.e. with remove_separators().
 
     """
-    if type(nhs_number) != str or len(nhs_number) != 10 or not nhs_number.isnumeric():
+    if (type(nhs_number) != str and type(nhs_number) != unicode) or len(nhs_number) != 10 or not nhs_number.isnumeric():
         return False
 
     check_digit = calculate_check_digit(nhs_number)

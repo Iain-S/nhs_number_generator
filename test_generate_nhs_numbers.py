@@ -1,5 +1,6 @@
 """Test cases for the generate_nhs_numbers module."""
 
+from __future__ import unicode_literals
 import unittest
 from generate_nhs_numbers import (deterministic_nhs_number_generator, add_separators, calculate_check_digit,
                                   random_nhs_number_generator, is_valid_nhs_number, remove_separators)
@@ -14,8 +15,10 @@ class TestNHSNumbers(unittest.TestCase):
     def test_is_valid(self):
         """Test that we can tell a valid number from an invalid one."""
         self.assertTrue(is_valid_nhs_number('0000000000'))
-        self.assertFalse(is_valid_nhs_number('0000000001'))
-        self.assertFalse(is_valid_nhs_number('000000r000'))
+        self.assertFalse(is_valid_nhs_number('0000000001'))   # invalid check digit
+        self.assertFalse(is_valid_nhs_number('000000r000'))   # not a number
+        self.assertFalse(is_valid_nhs_number('000000000'))    # too short
+        self.assertFalse(is_valid_nhs_number('00000000000'))  # too long
 
     def test_no_duplicates(self):
         """Test that the deterministic generator doesn't repeat itself over a small range."""
