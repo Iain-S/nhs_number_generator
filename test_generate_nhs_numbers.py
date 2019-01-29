@@ -19,6 +19,7 @@ class TestNHSNumbers(unittest.TestCase):
         self.assertFalse(is_valid_nhs_number('000000r000'))   # not a number
         self.assertFalse(is_valid_nhs_number('000000000'))    # too short
         self.assertFalse(is_valid_nhs_number('00000000000'))  # too long
+        self.assertFalse(is_valid_nhs_number('0000000060'))   # check digit would be 10
 
     def test_no_duplicates(self):
         """Test that the deterministic generator doesn't repeat itself over a small range."""

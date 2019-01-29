@@ -8,12 +8,12 @@ Examples:
         $ python generate_nhs_numbers.py
 
     Alternatively, you can use one of the two types of generator function:
-    This one will start at '0000000000' and count up, skipping any invalid numbers
-        >>> deterministic_gen = deterministic_nhs_number_generator(4404404404)
+    This one will start at '4000000004' and count up, skipping any invalid numbers or numbers not routinely issued
+        >>> deterministic_gen = deterministic_nhs_number_generator()
         >>> next(deterministic_gen)
 
     This one is (pseudo)random
-        >>> random_gen = random_nhs_number_generator(highest_number=489999999)
+        >>> random_gen = random_nhs_number_generator([(489000000, 489999999)])
         >>> next(random_gen)
 
 """
