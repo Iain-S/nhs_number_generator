@@ -19,7 +19,7 @@ Examples:
 """
 
 from __future__ import unicode_literals
-from random import randint
+from random import randint, choice
 from argparse import ArgumentParser
 
 check_digit_weights = {0: 10,
@@ -63,64 +63,72 @@ def calculate_check_digit(nhs_number):
         return eleven_minus_remainder
 
 
-def deterministic_nhs_number_generator(lowest_number=000000000, highest_number=999999999):
+def deterministic_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 708800001)]):
     """Returns a generator for a predictable sequence of 10-digit NHS numbers.
 
-    Args:
-        lowest_number (int): Specify the first NHS number in the sequence (without the check digit).
-                             If it is invalid, it will be skipped over.
-        highest_number (int): Specify the last NHS number in the sequence (without the check digit).
+    The default ranges are the ones currently issued in England, Wales and the Isle of Man.  Numbers outside of this
+    range may be valid but could conflict with identifiers used in Northern Ireland and Scotland.
+    See https://en.wikipedia.org/wiki/NHS_number
+
+        Args:
+        ranges [(int, int), ...]: Specify the ranges for the sequence.  You should exclude the check digits.
 
     """
-    if highest_number < lowest_number:
-        raise ValueError("The high end of the range should not be lower than the low end.")
+    for _range in ranges:
+        if _range[1] < _range[0]:
+            raise ValueError("The high end of the range should not be lower than the low end.")
 
-    if (highest_number - lowest_number) == 0:
-        only_possible_check_digit = calculate_check_digit('{:09d}'.format(lowest_number))
-        if only_possible_check_digit == 10:
-            raise ValueError("{:09d} is not a valid NHS number.".format(lowest_number))
+        if (_range[1] - _range[0]) == 0:
+            only_possible_check_digit = calculate_check_digit('{:09d}'.format(_range[0]))
+            if only_possible_check_digit == 10:
+                raise ValueError("{:09d} is not a valid NHS number.".format(_range[0]))
 
-    i = lowest_number
+    for _range in ranges:
+        i = _range[0]
 
-    while i <= highest_number:
-        candidate_number = '{:09d}'.format(i)
+        while i <= _range[1]:
+            candidate_number = '{:09d}'.format(i)
 
-        check_digit = calculate_check_digit(candidate_number)
+            check_digit = calculate_check_digit(candidate_number)
 
-        if check_digit != 10:
-            yield candidate_number + str(check_digit)
+            if check_digit != 10:
+                yield candidate_number + str(check_digit)
 
-        i += 1
+            i += 1
+
     return
 
 
-def random_nhs_number_generator(lowest_number=000000000, highest_number=999999999):
+def random_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 708800001)]):
     """Returns a generator for an unpredictable sequence of 10-digit NHS numbers.
 
+    The default ranges are the ones currently issued in England, Wales and the Isle of Man.  Numbers outside of this
+    range may be valid but could conflict with identifiers used in Northern Ireland and Scotland.
+    See https://en.wikipedia.org/wiki/NHS_number
+
         Args:
-        lowest_number (int): Specify the lowest allowable NHS number in the sequence (without the check digit).
-        highest_number (int): Specify the highest allowable NHS number in the sequence (without the check digit).
+        ranges [(int, int), ...]: Specify the ranges for the sequence.  You should exclude the check digits.
 
     """
-    if highest_number < lowest_number:
-        raise ValueError("The high end of the range should not be lower than the low end.")
+    for _range in ranges:
+        if _range[1] < _range[0]:
+            raise ValueError("The high end of the range should not be lower than the low end.")
 
-    if (highest_number - lowest_number) == 0:
-        only_possible_check_digit = calculate_check_digit('{:09d}'.format(lowest_number))
-        if only_possible_check_digit == 10:
-            raise ValueError("{:09d} is not a valid NHS number.".format(lowest_number))
+        if (_range[1] - _range[0]) == 0:
+            only_possible_check_digit = calculate_check_digit('{:09d}'.format(_range[0]))
+            if only_possible_check_digit == 10:
+                raise ValueError("{:09d} is not a valid NHS number.".format(_range[0]))
 
     while True:
-        # Get a random int between a and b inclusive.
-        # By default these are 000000000 and 999999999 which create the min and max allowable NHS numbers.
-        candidate_number = '{:09d}'.format(randint(lowest_number, highest_number))
+        # Pick a tuple (a, b) at random from ranges and get a random int >= a and <= b.
+        candidate_number = '{:09d}'.format(randint(*choice(ranges)))
         check_digit = calculate_check_digit(candidate_number)
 
         if check_digit != 10:
             yield candidate_number + str(check_digit)
 
 
-def add_separators(nhs_number, separator='-'):
+def add_separators(nhs_number, separator=' '):
     """Returns the NHS number in 3-3-4 format with a separator in between (a hyphen by default)."""
     return nhs_number[0:3] + separator + nhs_number[3:6] + separator + nhs_number[6:10]
 
