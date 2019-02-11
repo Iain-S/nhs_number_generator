@@ -4,7 +4,7 @@ This module allows you to generate 10-digit NHS numbers, which are the unique pa
 Health Service.  Note that, at some point point in the past, NHS numbers were 9-digits long.
 
 Examples:
-    The file can be called from the command line, in which case it prints the numbers directly to the screen
+    The file can be called from the command line, in which case it prints the numbers directly to the screen:
         $ python generate_nhs_numbers.py
 
     Alternatively, you can use one of the two types of generator function:
@@ -12,7 +12,7 @@ Examples:
         >>> deterministic_gen = deterministic_nhs_number_generator()
         >>> next(deterministic_gen)
 
-    This one is (pseudo)random
+    This one is (pseudo)random and will generate NHS numbers in the range specified
         >>> random_gen = random_nhs_number_generator([(489000000, 489999999)])
         >>> next(random_gen)
 
@@ -71,7 +71,7 @@ def deterministic_nhs_number_generator(ranges=[(400000000, 499999999), (60000000
     See https://en.wikipedia.org/wiki/NHS_number
 
         Args:
-        ranges [(int, int), ...]: Specify the ranges for the sequence.  You should exclude the check digits.
+        ranges [(int, int), ...]: Specify the ranges for the sequence.  You must exclude the check digits.
 
     """
     for _range in ranges:
@@ -107,7 +107,7 @@ def random_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 7088
     See https://en.wikipedia.org/wiki/NHS_number
 
         Args:
-        ranges [(int, int), ...]: Specify the ranges for the sequence.  You should exclude the check digits.
+        ranges [(int, int), ...]: Specify the ranges for the sequence.  You must exclude the check digits.
 
     """
     for _range in ranges:
@@ -170,7 +170,7 @@ def main():
     parser.add_argument('-n', required=False, type=int, help="the amount to generate", default=10)
     parser.add_argument('-d', '--deterministic', action='store_const',
                         const=True, default=False,
-                        help='whether to generate predictably, starting at 0000000000')
+                        help='whether to generate predictably, starting at 4000000004')
     parser.add_argument('-f', '--format', action='store_const',
                         const=True, default=False,
                         help='whether to format using hyphens e.g. 565-228-3297')
