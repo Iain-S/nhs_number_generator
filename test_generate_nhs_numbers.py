@@ -4,6 +4,15 @@ from __future__ import unicode_literals
 import unittest
 from generate_nhs_numbers import (deterministic_nhs_number_generator, add_separators, calculate_check_digit,
                                   random_nhs_number_generator, is_valid_nhs_number, remove_separators)
+import generate_nhs_numbers
+import sys
+
+if sys.version_info.major >= 3:  # pragma: no cover
+    from io import StringIO
+    from unittest.mock import patch
+else:
+    from StringIO import StringIO
+    from mock import patch
 
 
 class TestNHSNumbers(unittest.TestCase):
@@ -116,6 +125,16 @@ class TestNHSNumbers(unittest.TestCase):
         self.assertEqual("7645529342", remove_separators("764-552-9342"))
         self.assertEqual("7645529342", remove_separators("764 552 9342"))
         self.assertEqual("7645529342", remove_separators("7645529342"))
+
+    def test_default_amount(self):
+        """Test the default number of NHS numbers generated when calling as a script."""
+        with patch('sys.stdout', new=StringIO()) as fakeOutput:
+            generate_nhs_numbers.main()
+            output = fakeOutput.getvalue().strip().split("\n")
+
+        for nhs_num in output:
+            self.assertTrue(is_valid_nhs_number(nhs_num))
+        self.assertEqual(10, len(output))
 
 
 if __name__ == "__main__":
