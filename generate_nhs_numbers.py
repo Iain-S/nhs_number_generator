@@ -121,6 +121,7 @@ def random_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 7088
 
     while True:
         # Pick a tuple (a, b) at random from ranges and get a random int >= a and <= b.
+        # Note that this weights the ranges equally, no matter their size
         candidate_number = '{:09d}'.format(randint(*choice(ranges)))
         check_digit = calculate_check_digit(candidate_number)
 
@@ -129,7 +130,7 @@ def random_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 7088
 
 
 def add_separators(nhs_number, separator=' '):
-    """Returns the NHS number in 3-3-4 format with a separator in between (a hyphen by default)."""
+    """Returns the NHS number in 3-3-4 format with a separator in between (a space by default)."""
     return nhs_number[0:3] + separator + nhs_number[3:6] + separator + nhs_number[6:10]
 
 
@@ -152,7 +153,7 @@ def is_valid_nhs_number(nhs_number):
 
     check_digit = calculate_check_digit(nhs_number)
 
-    # Check digit shouldn't be 10 (how could it be, it is only one digit)
+    # The check digit shouldn't be 10 (how could it be, it is only one digit)
     if check_digit == 10:
         return False
 
@@ -173,7 +174,7 @@ def main():
                         help='whether to generate predictably, starting at 4000000004')
     parser.add_argument('-f', '--format', action='store_const',
                         const=True, default=False,
-                        help='whether to format using hyphens e.g. 565-228-3297')
+                        help='whether to format using spaces e.g. 565 228 3297')
 
     # Get the arguments passed in by the user
     arguments = parser.parse_args()
