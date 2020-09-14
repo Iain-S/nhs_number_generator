@@ -9,7 +9,7 @@ Generate and validate NHS numbers in Python 2.7+ and 3.
 
 Generate five (-n 5) sequential (-d) formatted (-f) nhs numbers:
 
-```sh
+```
 $ python3 generate_nhs_numbers.py -n 5 -d -f
 400 000 0004
 400 000 0012
@@ -20,7 +20,7 @@ $ python3 generate_nhs_numbers.py -n 5 -d -f
 
 Use the -h flag for help:
 
-```shell
+```
 $ python3 generate_nhs_numbers.py -h
 usage: generate_nhs_numbers.py [-h] [-n N] [-d] [-f]
 
