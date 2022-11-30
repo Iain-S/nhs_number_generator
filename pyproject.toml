@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "nhs-number-generator"
+version = "1.0.0"
+description = ""
+authors = ["Iain <25081046+Iain-S@users.noreply.github.com>"]
+license = "GPLv3"
+readme = "README.md"
+packages = [{include = "nhs_number_generator"}]
+
+[tool.poetry.dependencies]
+python = "^2.7 || ^3.6"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
