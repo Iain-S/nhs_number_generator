@@ -1,0 +1,75 @@
+---
+name: unit-test action
+on:
+  pull_request:
+  # Run on merge to main because caches are inherited from parent branches
+  push:
+    branches:
+      - main
+env:
+  # This should be the default but we'll be explicit
+  PRE_COMMIT_HOME: ~/.caches/pre-commit
+jobs:
+  two_job:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: ['2.7']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install package
+        shell: bash
+        run: |
+          python -m pip install .
+          python -m pip install mock
+      - name: Run tests
+        shell: bash
+        run: |
+          python tests/test_generate_nhs_numbers.py
+  three_job:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: ['3.6']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install package
+        shell: bash
+        run: |
+          python -m pip install .
+      - name: Run tests
+        shell: bash
+        run: |
+          python tests/test_generate_nhs_numbers.py
+  coverage_job:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python_version: ['3.7']
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+      - name: Install package
+        shell: bash
+        run: |
+          python -m pip install .
+          python -m pip install coverage
+      - name: Run tests
+        shell: bash
+        run: |
+          python -m coverage run --source nhs_number_generator tests/test_generate_nhs_numbers.py
+          python -m coverage report --show-missing
