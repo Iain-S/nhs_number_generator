@@ -19,18 +19,11 @@ Examples:
 """
 
 from __future__ import unicode_literals
-from random import randint, choice
-from argparse import ArgumentParser
 
-check_digit_weights = {0: 10,
-                       1: 9,
-                       2: 8,
-                       3: 7,
-                       4: 6,
-                       5: 5,
-                       6: 4,
-                       7: 3,
-                       8: 2}
+from argparse import ArgumentParser
+from random import choice, randint
+
+check_digit_weights = {0: 10, 1: 9, 2: 8, 3: 7, 4: 6, 5: 5, 6: 4, 7: 3, 8: 2}
 
 
 def calculate_check_digit(nhs_number):
@@ -63,7 +56,9 @@ def calculate_check_digit(nhs_number):
         return eleven_minus_remainder
 
 
-def deterministic_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 708800001)]):
+def deterministic_nhs_number_generator(
+    ranges=[(400000000, 499999999), (600000000, 708800001)]
+):
     """Returns a generator for a predictable sequence of 10-digit NHS numbers.
 
     The default ranges are the ones currently issued in England, Wales and the Isle of Man.  Numbers outside of this
@@ -76,10 +71,14 @@ def deterministic_nhs_number_generator(ranges=[(400000000, 499999999), (60000000
     """
     for _range in ranges:
         if _range[1] < _range[0]:
-            raise ValueError("The high end of the range should not be lower than the low end.")
+            raise ValueError(
+                "The high end of the range should not be lower than the low end."
+            )
 
         if (_range[1] - _range[0]) == 0:
-            only_possible_check_digit = calculate_check_digit('{:09d}'.format(_range[0]))
+            only_possible_check_digit = calculate_check_digit(
+                "{:09d}".format(_range[0])
+            )
             if only_possible_check_digit == 10:
                 raise ValueError("{:09d} is not a valid NHS number.".format(_range[0]))
 
@@ -87,7 +86,7 @@ def deterministic_nhs_number_generator(ranges=[(400000000, 499999999), (60000000
         i = _range[0]
 
         while i <= _range[1]:
-            candidate_number = '{:09d}'.format(i)
+            candidate_number = "{:09d}".format(i)
 
             check_digit = calculate_check_digit(candidate_number)
 
@@ -99,7 +98,9 @@ def deterministic_nhs_number_generator(ranges=[(400000000, 499999999), (60000000
     return
 
 
-def random_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 708800001)]):
+def random_nhs_number_generator(
+    ranges=[(400000000, 499999999), (600000000, 708800001)]
+):
     """Returns a generator for an unpredictable sequence of 10-digit NHS numbers.
 
     The default ranges are the ones currently issued in England, Wales and the Isle of Man.  Numbers outside of this
@@ -112,24 +113,28 @@ def random_nhs_number_generator(ranges=[(400000000, 499999999), (600000000, 7088
     """
     for _range in ranges:
         if _range[1] < _range[0]:
-            raise ValueError("The high end of the range should not be lower than the low end.")
+            raise ValueError(
+                "The high end of the range should not be lower than the low end."
+            )
 
         if (_range[1] - _range[0]) == 0:
-            only_possible_check_digit = calculate_check_digit('{:09d}'.format(_range[0]))
+            only_possible_check_digit = calculate_check_digit(
+                "{:09d}".format(_range[0])
+            )
             if only_possible_check_digit == 10:
                 raise ValueError("{:09d} is not a valid NHS number.".format(_range[0]))
 
     while True:
         # Pick a tuple (a, b) at random from ranges and get a random int >= a and <= b.
         # Note that this weights the ranges equally, no matter their size
-        candidate_number = '{:09d}'.format(randint(*choice(ranges)))
+        candidate_number = "{:09d}".format(randint(*choice(ranges)))
         check_digit = calculate_check_digit(candidate_number)
 
         if check_digit != 10:
             yield candidate_number + str(check_digit)
 
 
-def add_separators(nhs_number, separator=' '):
+def add_separators(nhs_number, separator=" "):
     """Returns the NHS number in 3-3-4 format with a separator in between (a space by default)."""
     return nhs_number[0:3] + separator + nhs_number[3:6] + separator + nhs_number[6:10]
 
@@ -148,7 +153,11 @@ def is_valid_nhs_number(nhs_number):
     NHS numbers in 3-3-4 format should be converted first, i.e. with remove_separators().
 
     """
-    if (type(nhs_number) != str and type(nhs_number) != unicode) or len(nhs_number) != 10 or not nhs_number.isnumeric():
+    if (
+        (type(nhs_number) != str and type(nhs_number) != type(""))
+        or len(nhs_number) != 10
+        or not nhs_number.isnumeric()
+    ):
         return False
 
     check_digit = calculate_check_digit(nhs_number)
@@ -168,13 +177,25 @@ def main():
 
     # Define our command line options with sensible defaults and help messages
     parser = ArgumentParser(description="Generate 10-digit NHS numbers.")
-    parser.add_argument('-n', required=False, type=int, help="the amount to generate", default=10)
-    parser.add_argument('-d', '--deterministic', action='store_const',
-                        const=True, default=False,
-                        help='whether to generate predictably, starting at 4000000004')
-    parser.add_argument('-f', '--format', action='store_const',
-                        const=True, default=False,
-                        help='whether to format using spaces e.g. 565 228 3297')
+    parser.add_argument(
+        "-n", required=False, type=int, help="the amount to generate", default=10
+    )
+    parser.add_argument(
+        "-d",
+        "--deterministic",
+        action="store_const",
+        const=True,
+        default=False,
+        help="whether to generate predictably, starting at 4000000004",
+    )
+    parser.add_argument(
+        "-f",
+        "--format",
+        action="store_const",
+        const=True,
+        default=False,
+        help="whether to format using spaces e.g. 565 228 3297",
+    )
 
     # Get the arguments passed in by the user
     arguments = parser.parse_args()
