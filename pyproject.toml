@@ -11,6 +11,9 @@ packages = [{include = "nhs_number_generator"}]
 python = "^2.7 || ^3.6"
 
 
+[tool.isort]
+profile = "black"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
