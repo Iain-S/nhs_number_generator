@@ -2,9 +2,9 @@
 
 from __future__ import unicode_literals
 import unittest
-from generate_nhs_numbers import (deterministic_nhs_number_generator, add_separators, calculate_check_digit,
+from nhs_number_generator.generate_nhs_numbers import (deterministic_nhs_number_generator, add_separators, calculate_check_digit,
                                   random_nhs_number_generator, is_valid_nhs_number, remove_separators)
-import generate_nhs_numbers
+from nhs_number_generator import generate_nhs_numbers
 import sys
 
 if sys.version_info.major >= 3:  # pragma: no cover
