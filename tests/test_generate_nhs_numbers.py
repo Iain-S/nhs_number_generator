@@ -162,7 +162,7 @@ class TestCLI(unittest.TestCase):
             ["nhs_number_generator"],
             capture_output=True,
         )
-        self.assertEqual(1, self.get_return_code(completed_process))
+        self.assertEqual(0, self.get_return_code(completed_process))
 
 
 if __name__ == "__main__":

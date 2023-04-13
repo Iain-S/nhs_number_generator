@@ -20,7 +20,6 @@ Examples:
 
 from __future__ import unicode_literals
 
-import sys
 from argparse import ArgumentParser
 from random import choice, randint
 
@@ -197,10 +196,6 @@ def main():
         default=False,
         help="whether to format using spaces e.g. 565 228 3297",
     )
-
-    if len(sys.argv) == 1:
-        parser.print_help(sys.stderr)
-        sys.exit(1)
 
     arguments = parser.parse_args()
 
