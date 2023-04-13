@@ -1,14 +1,16 @@
 """Generate 10-digit NHS numbers with optional formatting.
 
-This module allows you to generate 10-digit NHS numbers, which are the unique patient identifier used by the National
-Health Service.  Note that, at some point point in the past, NHS numbers were 9-digits long.
+This module allows you to generate 10-digit NHS numbers.
+These are the unique patient identifier used by the National Health Service.
+Note that, at some point in the past, NHS numbers were 9-digits long.
 
 Examples:
-    The file can be called from the command line, in which case it prints the numbers directly to the screen:
-        $ python generate_nhs_numbers.py
+    The file can be called from the command line:
+        $ nhs_number_generator --help
 
-    Alternatively, you can use one of the two types of generator function:
-    This one will start at '4000000004' and count up, skipping any invalid numbers or numbers not routinely issued
+    Alternatively, you can use one of the two generators:
+    This one will start at '4000000004' and count up,
+    skipping any invalid numbers or numbers not routinely issued
         >>> deterministic_gen = deterministic_nhs_number_generator()
         >>> next(deterministic_gen)
 
@@ -27,10 +29,11 @@ check_digit_weights = {0: 10, 1: 9, 2: 8, 3: 7, 4: 6, 5: 5, 6: 4, 7: 3, 8: 2}
 
 
 def calculate_check_digit(nhs_number):
-    """Given the first 9 or 10 digits of a 10-digit NHS number, calculates what the check digit should be.
+    """Given the first 9 or 10 digits of a 10-digit NHS number, calculate the check digit.
 
     Returns:
-        int: The check digit.  Note that this function may return 10, in which case the NHS number is invalid.
+        int: The check digit.
+             Note that this function may return 10, in which case the NHS number is invalid.
 
     """
 
@@ -49,24 +52,26 @@ def calculate_check_digit(nhs_number):
     # Step 4) Subtract the remainder from 11 to give the check digit.
     eleven_minus_remainder = 11 - remainder
 
-    # If the result is 11 then a check digit of 0 is used. If the result is 10 then the NHS number is invalid.
+    # If the result is 11 then a check digit of 0 is used.
     if eleven_minus_remainder == 11:
         return 0
-    else:
-        return eleven_minus_remainder
+
+    # If the result is 10 then the NHS number is invalid.
+    return eleven_minus_remainder
 
 
 def deterministic_nhs_number_generator(
-    ranges=[(400000000, 499999999), (600000000, 708800001)]
+    ranges=((400000000, 499999999), (600000000, 708800001))
 ):
     """Returns a generator for a predictable sequence of 10-digit NHS numbers.
 
-    The default ranges are the ones currently issued in England, Wales and the Isle of Man.  Numbers outside of this
-    range may be valid but could conflict with identifiers used in Northern Ireland and Scotland.
-    See https://en.wikipedia.org/wiki/NHS_number
+    The default ranges are the ones currently issued in England, Wales and the Isle of Man.
+    Numbers outside of this range may be valid but could conflict with identifiers used in
+    Northern Ireland and Scotland. See https://en.wikipedia.org/wiki/NHS_number
 
         Args:
-        ranges [(int, int), ...]: Specify the ranges for the sequence.  You must exclude the check digits.
+        ranges [(int, int), ...]: Specify the ranges for the sequence.
+          You must exclude the check digits.
 
     """
     for _range in ranges:
@@ -95,20 +100,19 @@ def deterministic_nhs_number_generator(
 
             i += 1
 
-    return
-
 
 def random_nhs_number_generator(
-    ranges=[(400000000, 499999999), (600000000, 708800001)]
+    ranges=((400000000, 499999999), (600000000, 708800001))
 ):
     """Returns a generator for an unpredictable sequence of 10-digit NHS numbers.
 
-    The default ranges are the ones currently issued in England, Wales and the Isle of Man.  Numbers outside of this
-    range may be valid but could conflict with identifiers used in Northern Ireland and Scotland.
-    See https://en.wikipedia.org/wiki/NHS_number
+    The default ranges are the ones currently issued in England, Wales and the Isle of Man.
+    Numbers outside of this range may be valid but could conflict with identifiers used in
+    Northern Ireland and Scotland. See https://en.wikipedia.org/wiki/NHS_number
 
-        Args:
-        ranges [(int, int), ...]: Specify the ranges for the sequence.  You must exclude the check digits.
+    Args:
+        ranges [(int, int), ...]: Specify the ranges for the sequence.
+          You must exclude the check digits.
 
     """
     for _range in ranges:
@@ -143,8 +147,7 @@ def remove_separators(nhs_number):
     """Remove separators, if there are any, to go from e.g. 123-456-7890 to 1234567890."""
     if not nhs_number[3].isnumeric() and not nhs_number[7].isnumeric():
         return nhs_number[0:3] + nhs_number[4:7] + nhs_number[8:]
-    else:
-        return nhs_number
+    return nhs_number
 
 
 def is_valid_nhs_number(nhs_number):
@@ -154,7 +157,7 @@ def is_valid_nhs_number(nhs_number):
 
     """
     if (
-        (type(nhs_number) != str and type(nhs_number) != type(""))
+        (not isinstance(nhs_number, str) and not isinstance(nhs_number, type("")))
         or len(nhs_number) != 10
         or not nhs_number.isnumeric()
     ):
@@ -166,10 +169,7 @@ def is_valid_nhs_number(nhs_number):
     if check_digit == 10:
         return False
 
-    if str(check_digit) == nhs_number[9]:
-        return True
-    else:
-        return False
+    return str(check_digit) == nhs_number[9]
 
 
 def main():
@@ -207,9 +207,13 @@ def main():
     if arguments.format:
         formatter = add_separators
     else:
-        formatter = lambda x: x
 
-    for i in range(arguments.n):
+        def identity(an_argument):
+            return an_argument
+
+        formatter = identity
+
+    for _ in range(arguments.n):
         print(formatter(next(generator)))
 
 
