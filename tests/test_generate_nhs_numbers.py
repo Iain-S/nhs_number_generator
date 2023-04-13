@@ -156,7 +156,7 @@ class TestCLI(unittest.TestCase):
 
     def test_no_args(self):
         """Check that we can call the CLI command without arguments."""
-        with open(os.devnull, "w", encoding="utf-8") as devnull:
+        with open(os.devnull, "wb") as devnull:
             retcode = call(["nhs_number_generator"], stdout=devnull)
         self.assertEqual(0, retcode)
 
