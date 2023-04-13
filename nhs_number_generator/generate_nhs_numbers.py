@@ -207,7 +207,11 @@ def main():
     if arguments.format:
         formatter = add_separators
     else:
-        formatter = lambda x: x
+
+        def identity(an_argument):
+            return an_argument
+
+        formatter = identity
 
     for _ in range(arguments.n):
         print(formatter(next(generator)))
