@@ -22,7 +22,6 @@ Examples:
 
 from __future__ import unicode_literals
 
-import sys
 from argparse import ArgumentParser
 from random import choice, randint
 
@@ -198,13 +197,6 @@ def main():
         help="whether to format using spaces e.g. 565 228 3297",
     )
 
-<<<<<<< HEAD
-=======
-    if len(sys.argv) == 1:
-        parser.print_help(sys.stderr)
-        sys.exit(1)
-
->>>>>>> 284d0b0 (Add CLI command to pyproject.toml)
     arguments = parser.parse_args()
 
     if arguments.deterministic:

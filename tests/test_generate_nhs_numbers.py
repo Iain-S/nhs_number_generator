@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import os
 import sys
 import unittest
-from subprocess import check_call
+from subprocess import call
 
 from nhs_number_generator import generate_nhs_numbers
 from nhs_number_generator.generate_nhs_numbers import (
@@ -153,9 +153,12 @@ class TestNHSNumbers(unittest.TestCase):
 
 class TestCLI(unittest.TestCase):
     """Functional tests for the CLI command."""
+
     def test_no_args(self):
-        with open(os.devnull, "w") as devnull:
-            check_call(["nhs_number_generator"], stdout=devnull)
+        """Check that we can call the CLI command without arguments."""
+        with open(os.devnull, "w", encoding="utf-8") as devnull:
+            retcode = call(["nhs_number_generator"], stdout=devnull)
+        self.assertEqual(0, retcode)
 
 
 if __name__ == "__main__":
