@@ -2,9 +2,9 @@
 name: pre-commit action
 on:
   pull_request:
-  # Run on merge to main because caches are inherited from parent branches
   push:
     branches:
+      # Run on merge to main because caches are inherited from parent branches
       - main
 env:
   # This should be the default but we'll be explicit
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ['3.10']
+        python_version: ['3.11']
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3

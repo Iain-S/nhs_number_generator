@@ -2,13 +2,10 @@
 name: unit-test action
 on:
   pull_request:
-  # Run on merge to main because caches are inherited from parent branches
   push:
     branches:
+      # Run on merge to main because caches are inherited from parent branches
       - main
-env:
-  # This should be the default but we'll be explicit
-  PRE_COMMIT_HOME: ~/.caches/pre-commit
 jobs:
   two_job:
     runs-on: ubuntu-latest
@@ -35,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ['3.6']
+        python_version: ['3.6', '3.7', '3.8', '3.9', '3.10']
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -55,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ['3.7']
+        python_version: ['3.11']
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -73,3 +70,5 @@ jobs:
         run: |
           python -m coverage run --source nhs_number_generator tests/test_generate_nhs_numbers.py
           python -m coverage report --show-missing
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v2
