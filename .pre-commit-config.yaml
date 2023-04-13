@@ -22,7 +22,10 @@ repos:
     rev: 5.12.0
     hooks:
       - id: isort
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
+  - repo: local
     hooks:
-      - id: flake8
+      - id: pylint
+        name: Pylint
+        entry: poetry run pylint
+        language: system
+        types: ['python']
