@@ -1,6 +1,6 @@
 # NHS Number Generator
 
-[![Coverage Status](https://coveralls.io/repos/github/Iain-S/nhs_number_generator/badge.svg?branch=master)](https://coveralls.io/github/Iain-S/nhs_number_generator?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Iain-S/nhs_number_generator/badge.svg)](https://coveralls.io/github/Iain-S/nhs_number_generator)
 
 Generate and validate NHS numbers in Python 2.7+ and 3.6+.
 
@@ -80,7 +80,7 @@ print(unique_numbers)
 ```
 
 `deterministic_nhs_number_generator` will generate all 189,818,183 valid NHS numbers by default.
-Alternatively, we can provide a more limited range or pick the first N numbers:
+Alternatively, we can pick only as many numbers as we need or provide a more limited range:
 
 ```python
 from nhs_number_generator.generate_nhs_numbers import deterministic_nhs_number_generator
