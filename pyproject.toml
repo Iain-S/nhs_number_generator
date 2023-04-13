@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nhs-number-generator"
-version = "1.0.0"
+version = "2.0.0"
 description = ""
 authors = ["Iain <25081046+Iain-S@users.noreply.github.com>"]
 license = "GPLv3"
