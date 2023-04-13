@@ -42,7 +42,7 @@ class TestNHSNumbers(unittest.TestCase):
 
     def test_no_duplicates(self):
         """Test that the deterministic generator doesn't repeat itself over a small range."""
-        nhs_number_list = [next(self.deterministic_nhs_generator) for i in range(100)]
+        nhs_number_list = [next(self.deterministic_nhs_generator) for _ in range(100)]
         self.assertEqual(len(nhs_number_list), len(set(nhs_number_list)))
 
     def test_all_deterministic_nums_are_valid(self):
