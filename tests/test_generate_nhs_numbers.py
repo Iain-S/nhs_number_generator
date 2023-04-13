@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 import sys
 import unittest
-from subprocess import run
+from subprocess import DEVNULL, check_call
 
 from nhs_number_generator import generate_nhs_numbers
 from nhs_number_generator.generate_nhs_numbers import (
@@ -150,19 +150,8 @@ class TestNHSNumbers(unittest.TestCase):
 
 
 class TestCLI(unittest.TestCase):
-    def get_return_code(self, completed_process):
-        return (
-            completed_process.exit_code
-            if hasattr(completed_process, "exit_code")
-            else completed_process.returncode
-        )
-
     def test_no_args(self):
-        completed_process = run(
-            ["nhs_number_generator"],
-            capture_output=True,
-        )
-        self.assertEqual(0, self.get_return_code(completed_process))
+        check_call(["nhs_number_generator"], stdout=DEVNULL)
 
 
 if __name__ == "__main__":
