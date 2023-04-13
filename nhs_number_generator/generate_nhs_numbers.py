@@ -197,7 +197,6 @@ def main():
         help="whether to format using spaces e.g. 565 228 3297",
     )
 
-    # Get the arguments passed in by the user
     arguments = parser.parse_args()
 
     if arguments.deterministic:
