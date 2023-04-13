@@ -5,7 +5,11 @@ from __future__ import unicode_literals
 import os
 import sys
 import unittest
+<<<<<<< HEAD
 from subprocess import check_call
+=======
+from subprocess import run
+>>>>>>> 284d0b0 (Add CLI command to pyproject.toml)
 
 from nhs_number_generator import generate_nhs_numbers
 from nhs_number_generator.generate_nhs_numbers import (
@@ -154,7 +158,3 @@ class TestCLI(unittest.TestCase):
     def test_no_args(self):
         with open(os.devnull, "w") as devnull:
             check_call(["nhs_number_generator"], stdout=devnull)
-
-
-if __name__ == "__main__":
-    unittest.main()
