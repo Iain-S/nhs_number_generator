@@ -2,9 +2,10 @@
 
 from __future__ import unicode_literals
 
+import os
 import sys
 import unittest
-from subprocess import DEVNULL, check_call
+from subprocess import check_call
 
 from nhs_number_generator import generate_nhs_numbers
 from nhs_number_generator.generate_nhs_numbers import (
@@ -151,7 +152,8 @@ class TestNHSNumbers(unittest.TestCase):
 
 class TestCLI(unittest.TestCase):
     def test_no_args(self):
-        check_call(["nhs_number_generator"], stdout=DEVNULL)
+        with open(os.devnull, "w") as devnull:
+            check_call(["nhs_number_generator"], stdout=devnull)
 
 
 if __name__ == "__main__":
